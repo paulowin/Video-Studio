@@ -1,0 +1,36 @@
+# Médias lourds — synchronisés hors Git
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.webm
+*.m4v
+*.mp3
+*.wav
+*.m4a
+*.aac
+*.flac
+*.psd
+*.prproj
+A-Roll/*
+B-Roll/*
+Export/*
+References/*
+!*/.gitkeep
+
+# Node / builds
+node_modules/
+out/
+build/
+dist/
+.remotion/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Système
+Thumbs.db
+desktop.ini
+.DS_Store
