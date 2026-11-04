@@ -40,5 +40,5 @@ desktop.ini
 .DS_Store
 
 # Caches HyperFrames (régénérés automatiquement)
-.hyperframes/preview/
+**/.hyperframes/preview/
 .thumbnails/
