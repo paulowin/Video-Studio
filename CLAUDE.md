@@ -34,7 +34,25 @@ En cours de construction. Ce qui est en place :
    Liste des sons calée sur les temps GSAP de la vidéo dans `projets/<nom>/sfx-cues.json`,
    puis `mix.py --target-lufs -14` → `Export/<nom>-sfx.mp4`.
 
-Reste à définir : voix off, sous-titres (Whisper), écriture des scripts.
+4. **Voix off (provisoire, gratuite)** : texte dans `projets/<nom>/voix.txt`, puis
+   `HYPERFRAMES_PYTHON=<python.exe> npx hyperframes tts voix.txt -v ff_siwis -o assets/voice/voix.wav`
+   (Kokoro, local, licence Apache 2.0 ; `pip install kokoro-onnx soundfile`). Plus tard : vraies voix.
+   Dans `index.html` : `<audio id="voice">` décalé de 0,2 s, musique baissée à `data-volume="0.32"`.
+5. **Sous-titres** : `faster-whisper` (modèle `small`, `language="fr"`, `word_timestamps=True`,
+   texte de `voix.txt` en `initial_prompt`) → `transcript.json` ; morceaux de 1 à 4 mots calés
+   sur la voix, mots-clés en or (`.hl`). Le whisper-cpp de HyperFrames n'est pas installé.
+6. **SFX sous la voix** : `mix.py ... --voice-safe --target-lufs -14`, `highpass: 140` sur les impacts.
+
+## Scripts (outil anti-doublons)
+Tous les scripts vivent dans `scripts/` (un fichier `NNN-titre.md` par vidéo) et sont gérés
+par `python outils/scripts.py`. Tableau de bord : `scripts/INDEX.md` (généré, ne pas éditer).
+
+- **Avant d'écrire un script** : `python outils/scripts.py verifier "<sujet>"`. Un même sujet
+  principal (ex. Mansa Moussa / Mansa Musa) bloque la création ; des mots en commun donnent un
+  simple avertissement « sujet proche » → choisir un autre angle.
+- Créer : `nouveau "<titre>" --sujet ... --pays ... --theme ... --mots a,b,c` (ou `--corps fichier.md`).
+- Faire avancer : `statut <n°> idee|ecrit|verifie|voix|monte|publie [--lien URL]`.
+- Toujours remplir « Sources à vérifier » : les faits historiques sont vérifiés avant `verifie`.
 
 ## Sons et musique
 - **Sources** : Freesound en CC0 uniquement (liste à télécharger : `SFX-liste-freesound.md`).

@@ -87,15 +87,29 @@
         font-family: var(--font-display); font-size: 150px; letter-spacing: 14px; color: var(--gold);
       }
       #outro .small { font-size: 54px; font-weight: 500; color: var(--sky); }
+      #outro .question {
+        font-family: var(--font-display); font-size: 104px; line-height: 1.05; text-align: center;
+        text-transform: uppercase; color: var(--ink); padding: 0 80px; margin-bottom: 40px;
+      }
+      #outro .question span { color: var(--gold); }
+
+      #goldtag {
+        position: absolute; bottom: 40px; left: 40px;
+        font-family: var(--font-mono); font-size: 34px; color: var(--ground);
+        background: var(--gold); padding: 10px 20px;
+      }
     </style>
   </head>
   <body>
-    <div data-hf-id="hf-frlg" id="root" data-composition-id="main" data-start="0" data-duration="13" data-width="1080" data-height="1920">
+    <div data-hf-id="hf-frlg" id="root" data-composition-id="main" data-start="0" data-duration="19.6" data-width="1080" data-height="1920">
 
       <!-- Musique de fond : "Like an old zelda melody" par xkeril (Freesound 620594, CC0) -->
-      <audio id="music" src="assets/music/zelda-melody-xkeril.wav" data-start="0" data-duration="13" data-volume="1" data-fade-in="0.4" data-fade-out="1.5" data-track-index="2"></audio>
+      <audio id="music" src="assets/music/zelda-melody-xkeril.wav" data-start="0" data-duration="19.6" data-volume="0.32" data-fade-in="0.4" data-fade-out="1.8" data-track-index="2"></audio>
 
-      <div data-hf-id="hf-gkc7" id="main-scene" class="clip" data-start="0" data-duration="10.2" data-track-index="0">
+      <!-- Voix off : Kokoro ff_siwis (provisoire), texte dans voix.txt, mots minutés dans transcript.json -->
+      <audio id="voice" src="assets/voice/voix.wav" data-start="0.2" data-duration="17.9" data-volume="1" data-track-index="3"></audio>
+
+      <div data-hf-id="hf-gkc7" id="main-scene" class="clip" data-start="0" data-duration="15.1" data-track-index="0">
         <div data-hf-id="hf-uj8k" id="brand">DJAMTALA</div>
         <div data-hf-id="hf-uq5p" id="badge">AN <span data-hf-id="hf-g4wt" id="year">1300</span></div>
 
@@ -129,13 +143,15 @@
             </g>
           </svg>
           <div data-hf-id="hf-2a2v" id="label">MALI → LA MECQUE<br data-hf-id="hf-x5px"><b data-hf-id="hf-kwgq">CARAVANE EN ROUTE</b></div>
+          <div id="goldtag">PRIX DE L'OR ↓</div>
         </div>
 
         <div data-hf-id="hf-8af1" id="caption"></div>
         <div data-hf-id="hf-gy9w" id="frieze"></div>
       </div>
 
-      <div data-hf-id="hf-nleh" id="outro" class="clip" data-start="10.2" data-duration="2.8" data-track-index="1">
+      <div data-hf-id="hf-nleh" id="outro" class="clip" data-start="15.1" data-duration="4.5" data-track-index="1">
+        <div id="question" class="question">Tu connaissais <span>cette histoire</span> ?</div>
         <div data-hf-id="hf-9nhm" class="big">DJAMTALA</div>
         <div data-hf-id="hf-rd1e" class="small">Abonne-toi pour la suite</div>
       </div>
@@ -145,11 +161,29 @@
       const tl = gsap.timeline({ paused: true });
       const caption = document.getElementById("caption");
       const yearEl = document.getElementById("year");
+      // Sous-titres calés sur la voix (transcript.json + 0,2 s de décalage de la voix).
       const captions = [
-        [2.0, "En 1324, <span class='hl'>Mansa Moussa</span> quitte le Mali"],
-        [4.6, "pour un pèlerinage vers <span class='hl'>La Mecque</span>"],
-        [7.0, "Son voyage a fait <span class='hl'>chuter</span> le prix de l'or"],
+        [0.20, "En <span class='hl'>1324</span>,"],
+        [1.70, "cet empereur était"],
+        [2.44, "plus riche que tous"],
+        [3.34, "les rois d'Europe"],
+        [4.34, "Il s'appelle"],
+        [4.78, "<span class='hl'>Mansa Moussa</span>"],
+        [5.70, "roi du <span class='hl'>Mali</span>"],
+        [6.58, "Cette année-là,"],
+        [7.36, "il part en pèlerinage"],
+        [8.36, "vers <span class='hl'>La Mecque</span>"],
+        [9.08, "avec une immense"],
+        [9.68, "caravane"],
+        [10.24, "chargée d'<span class='hl'>or</span>"],
+        [11.22, "Au <span class='hl'>Caire</span>,"],
+        [11.86, "il en distribue"],
+        [12.62, "tellement que"],
+        [13.12, "le prix de l'<span class='hl'>or</span>"],
+        [13.70, "<span class='hl'>s'effondre</span>"],
+        [14.22, "pendant des années."],
       ];
+      const CAPTIONS_END = 15.0;
 
       // Le titre est déjà à l'écran à 0 s : la première image sert de miniature.
       tl.fromTo("#title .w", { y: 0 }, { y: -14, duration: 0.18, stagger: 0.05, yoyo: true, repeat: 1, ease: "power2.out" }, 0.1);
@@ -161,9 +195,11 @@
       tl.from("#scene", { opacity: 0, y: 80, duration: 0.5, ease: "power3.out" }, 1.0);
       tl.from("#sun", { scale: 0, transformOrigin: "200px 230px", duration: 0.7, ease: "back.out(1.6)" }, 1.3);
       gsap.set("#caravan", { x: -150, y: 470 });
-      tl.to("#caravan", { x: 1300, duration: 8.6, ease: "none" }, 1.3);
-      tl.to("#caravan", { y: 462, duration: 0.35, yoyo: true, repeat: 23, ease: "sine.inOut" }, 1.3);
-      tl.from("#label", { opacity: 0, x: 30, duration: 0.4 }, 1.8);
+      tl.to("#caravan", { x: 1300, duration: 13.6, ease: "none" }, 1.3);
+      tl.to("#caravan", { y: 462, duration: 0.35, yoyo: true, repeat: 37, ease: "sine.inOut" }, 1.3);
+      tl.from("#label", { opacity: 0, x: 30, duration: 0.4 }, 7.8);
+      // « le prix de l'or s'effondre » : l'étiquette tombe sur le mot.
+      tl.fromTo("#goldtag", { opacity: 0, y: -60 }, { opacity: 1, y: 0, duration: 0.35, ease: "bounce.out" }, 13.7);
 
       tl.from("#frieze", { scaleX: 0, duration: 1.2, ease: "power2.inOut" }, 0.6);
 
@@ -172,13 +208,14 @@
         line.className = "line";
         line.innerHTML = html;
         caption.appendChild(line);
-        const end = i + 1 < captions.length ? captions[i + 1][0] - 0.15 : 9.8;
-        tl.fromTo(line, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, t);
-        tl.to(line, { opacity: 0, duration: 0.15 }, end);
+        const end = i + 1 < captions.length ? captions[i + 1][0] - 0.06 : CAPTIONS_END;
+        tl.fromTo(line, { opacity: 0, y: 20, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.14, ease: "back.out(2)" }, t);
+        tl.to(line, { opacity: 0, duration: 0.06 }, end);
       });
 
-      tl.from("#outro .big", { opacity: 0, scale: 0.8, duration: 0.5, ease: "back.out(1.8)" }, 10.3);
-      tl.from("#outro .small", { opacity: 0, y: 30, duration: 0.4 }, 10.7);
+      tl.from("#question", { opacity: 0, y: 40, duration: 0.35, ease: "power3.out" }, 15.2);
+      tl.from("#outro .big", { opacity: 0, scale: 0.8, duration: 0.5, ease: "back.out(1.8)" }, 16.7);
+      tl.from("#outro .small", { opacity: 0, y: 30, duration: 0.4 }, 16.95);
 
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = tl;
