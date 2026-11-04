@@ -25,6 +25,10 @@ build/
 dist/
 .remotion/
 
+# HyperFrames : images de contrôle et rendus
+**/.hyperframes/artifacts/
+renders/
+
 # Python
 __pycache__/
 *.pyc

@@ -10,10 +10,49 @@
   code / IA).
 - **Langue** : français.
 
+## Comptes et monétisation
+L'utilisateur réside au **Canada** (vérifié en novembre 2026) :
+- **YouTube** : Programme Partenaire disponible. Plateforme prioritaire — seule vraie
+  rémunération aux vues. Pubs à partir de 1 000 abonnés + 10 M vues Shorts / 90 jours.
+- **TikTok** : Creator Rewards **non disponible** au Canada. Revenus via LIVE, Creator
+  Marketplace, Series. Garder un compte personnel (pas Business).
+- **Instagram** : cadeaux et abonnements disponibles ; bonus Reels sur invitation.
+  Compte professionnel « Créateur ».
+
+Un e-mail dédié à la chaîne a été créé. Comptes à créer dans l'ordre : YouTube, TikTok,
+Instagram — même pseudo `@djamtala` partout si possible.
+
 ## Méthode de production
 Pas encore définie. L'utilisateur regarde des tutos Instagram sur ce type de vidéos et
 va décrire les outils et étapes qu'ils utilisent, pour construire ensemble son propre
 processus. Quand c'est fait, documenter le processus ici.
+
+## Références de style (s'inspirer, ne pas copier)
+- instagram.com/reel/DecctgYO5KY — deconstruct.labb : infographie plate fond sombre.
+- instagram.com/reel/DfP-dpzDGjc — alfred.explique : illustration affiche, titre orange.
+- instagram.com/reel/DetdoAzxwx9 — ottok.zz : 3D filaire néon vert.
+
+Formule commune : titre-accroche dès la 1re seconde, une scène animée centrale,
+compteurs/étiquettes de données, voix off + sous-titres courts, fond sombre + accent
+fort, question finale pour les commentaires.
+
+## Identité visuelle Djamtala
+**Or et indigo** : bleu nuit indigo (comme les tissus teints d'Afrique de l'Ouest) et or.
+Éviter l'or orangé sur fond brun : ça rappelle trop la marque Claude.
+
+Badge d'année en haut à droite, frise de motifs africains en bas (or + bleu), étiquettes
+en police machine à écrire, illustrations plates style affiche.
+
+| Rôle | Couleur |
+|---|---|
+| Fond | `#070914` |
+| Scène / panneaux | `#10142B` |
+| Titres, badge, accents (or) | `#F2C94C` |
+| Éléments secondaires (bleu clair) | `#85B7EB` |
+| Frise (bleu) | `#378ADD` |
+| Texte / sous-titres | `#FFFFFF` |
+
+**Police des titres** : Anton (Google Fonts), en majuscules, condensée.
 
 ## Outils installés
 - **ffmpeg** (winget `Gyan.FFmpeg`) — conversion, découpe, assemblage.

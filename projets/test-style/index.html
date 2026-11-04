@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="fr" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@500;700&family=JetBrains+Mono:wght@500&display=block" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      /* Palette Djamtala : or et indigo */
+      :root {
+        --ground: #070914;
+        --panel: #10142b;
+        --gold: #f2c94c;
+        --sky: #85b7eb;
+        --blue: #378add;
+        --ink: #ffffff;
+        --font-display: "Anton", sans-serif;
+        --font-body: "Inter", sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--ground);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        font-family: var(--font-body);
+        color: var(--ink);
+      }
+      .clip { position: absolute; inset: 0; }
+
+      #brand {
+        position: absolute; top: 90px; left: 70px;
+        font-family: var(--font-display); font-size: 44px; letter-spacing: 8px;
+        color: var(--gold);
+      }
+      #badge {
+        position: absolute; top: 84px; right: 70px;
+        font-family: var(--font-mono); font-size: 40px;
+        color: var(--ground); background: var(--gold);
+        padding: 8px 22px;
+      }
+      #title {
+        position: absolute; top: 220px; left: 70px; right: 70px;
+        font-family: var(--font-display); font-size: 116px; line-height: 1.02;
+        text-transform: uppercase; text-align: center; color: var(--gold);
+      }
+      #title .w { display: inline-block; }
+
+      #scene {
+        position: absolute; top: 760px; left: 70px; right: 70px; height: 720px;
+        background: var(--panel); border-radius: 28px; overflow: hidden;
+      }
+      #label {
+        position: absolute; top: 36px; right: 40px; text-align: right;
+        font-family: var(--font-mono); font-size: 30px; color: var(--sky);
+        line-height: 1.4;
+      }
+      #label b { font-size: 46px; color: var(--gold); font-weight: 500; }
+
+      #caption {
+        position: absolute; top: 1560px; left: 90px; right: 90px;
+        text-align: center; font-size: 62px; font-weight: 700; line-height: 1.2;
+      }
+      #caption .line { position: absolute; left: 0; right: 0; opacity: 0; }
+      #caption .hl { color: var(--gold); }
+
+      #frieze {
+        position: absolute; bottom: 110px; left: 0; right: 0; height: 26px;
+        background: repeating-linear-gradient(90deg,
+          var(--gold) 0 26px, var(--ground) 26px 40px,
+          var(--blue) 40px 66px, var(--ground) 66px 80px);
+        transform-origin: left center;
+      }
+
+      #outro {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 30px; background: var(--ground);
+      }
+      #outro .big {
+        font-family: var(--font-display); font-size: 150px; letter-spacing: 14px; color: var(--gold);
+      }
+      #outro .small { font-size: 54px; font-weight: 500; color: var(--sky); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="13" data-width="1080" data-height="1920">
+
+      <div id="main-scene" class="clip" data-start="0" data-duration="10.2" data-track-index="0">
+        <div id="brand">DJAMTALA</div>
+        <div id="badge">AN <span id="year">1300</span></div>
+
+        <h1 id="title">
+          <span class="w">Cet</span> <span class="w">empereur</span> <span class="w">était</span>
+          <span class="w">plus</span> <span class="w">riche</span> <span class="w">que</span>
+          <span class="w">tous</span> <span class="w">les</span> <span class="w">rois</span>
+          <span class="w">d'Europe</span>
+        </h1>
+
+        <div id="scene" data-layout-allow-overflow>
+          <svg width="940" height="720" viewBox="0 0 940 720">
+            <circle id="sun" cx="200" cy="230" r="90" fill="#f2c94c" />
+            <path d="M0 520 Q 240 430 470 510 T 940 490 L 940 720 L 0 720 Z" fill="#1a2148" />
+            <path d="M0 580 Q 300 520 560 590 T 940 570 L 940 720 L 0 720 Z" fill="#232c5e" />
+            <g id="caravan">
+              <g id="camel">
+                <ellipse cx="0" cy="0" rx="70" ry="34" fill="#f2c94c" />
+                <ellipse cx="-10" cy="-30" rx="36" ry="26" fill="#f2c94c" />
+                <path d="M55 -10 L 90 -70 L 108 -70 L 80 -5 Z" fill="#f2c94c" />
+                <ellipse cx="108" cy="-74" rx="22" ry="12" fill="#f2c94c" />
+                <rect x="-50" y="20" width="12" height="70" fill="#f2c94c" />
+                <rect x="-25" y="20" width="12" height="70" fill="#f2c94c" />
+                <rect x="30" y="20" width="12" height="70" fill="#f2c94c" />
+                <rect x="52" y="20" width="12" height="70" fill="#f2c94c" />
+                <rect x="-40" y="-70" width="44" height="22" rx="4" fill="#378add" />
+              </g>
+              <use href="#camel" x="-260" />
+              <use href="#camel" x="-520" />
+              <use href="#camel" x="-780" />
+            </g>
+          </svg>
+          <div id="label">MALI → LA MECQUE<br><b>CARAVANE EN ROUTE</b></div>
+        </div>
+
+        <div id="caption"></div>
+        <div id="frieze"></div>
+      </div>
+
+      <div id="outro" class="clip" data-start="10.2" data-duration="2.8" data-track-index="1">
+        <div class="big">DJAMTALA</div>
+        <div class="small">Abonne-toi pour la suite</div>
+      </div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const caption = document.getElementById("caption");
+      const yearEl = document.getElementById("year");
+      const captions = [
+        [2.0, "En 1324, <span class='hl'>Mansa Moussa</span> quitte le Mali"],
+        [4.6, "pour un pèlerinage vers <span class='hl'>La Mecque</span>"],
+        [7.0, "Son voyage a fait <span class='hl'>chuter</span> le prix de l'or"],
+      ];
+
+      // Le titre est déjà à l'écran à 0 s : la première image sert de miniature.
+      tl.fromTo("#title .w", { y: 0 }, { y: -14, duration: 0.18, stagger: 0.05, yoyo: true, repeat: 1, ease: "power2.out" }, 0.1);
+      tl.fromTo("#badge", { scale: 1.2 }, { scale: 1, duration: 0.3, ease: "back.out(2)" }, 0.1);
+
+      const year = { v: 1300 };
+      tl.to(year, { v: 1324, duration: 1.6, ease: "power2.out", onUpdate: () => { yearEl.textContent = Math.round(year.v); } }, 0.4);
+
+      tl.from("#scene", { opacity: 0, y: 80, duration: 0.5, ease: "power3.out" }, 1.0);
+      tl.from("#sun", { scale: 0, transformOrigin: "200px 230px", duration: 0.7, ease: "back.out(1.6)" }, 1.3);
+      gsap.set("#caravan", { x: -150, y: 470 });
+      tl.to("#caravan", { x: 1300, duration: 8.6, ease: "none" }, 1.3);
+      tl.to("#caravan", { y: 462, duration: 0.35, yoyo: true, repeat: 23, ease: "sine.inOut" }, 1.3);
+      tl.from("#label", { opacity: 0, x: 30, duration: 0.4 }, 1.8);
+
+      tl.from("#frieze", { scaleX: 0, duration: 1.2, ease: "power2.inOut" }, 0.6);
+
+      captions.forEach(([t, html], i) => {
+        const line = document.createElement("div");
+        line.className = "line";
+        line.innerHTML = html;
+        caption.appendChild(line);
+        const end = i + 1 < captions.length ? captions[i + 1][0] - 0.15 : 9.8;
+        tl.fromTo(line, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, t);
+        tl.to(line, { opacity: 0, duration: 0.15 }, end);
+      });
+
+      tl.from("#outro .big", { opacity: 0, scale: 0.8, duration: 0.5, ease: "back.out(1.8)" }, 10.3);
+      tl.from("#outro .small", { opacity: 0, y: 30, duration: 0.4 }, 10.7);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
