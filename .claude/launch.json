@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "test-style",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "hyperframes@0.9.9", "preview", "projets/test-style", "--foreground", "--no-open", "--port=3002"],
+      "port": 3002
+    }
+  ]
+}

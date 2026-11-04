@@ -1,0 +1,17 @@
+{
+  "video": "C:/Users/User/Documents/GitHub/Video-Studio/Export/test-style-musique.mp4",
+  "keep_audio": "yes",
+  "music_ref": "C:/Users/User/Documents/GitHub/Video-Studio/projets/test-style/assets/music/zelda-melody-xkeril.wav",
+  "cues": [
+    {"t": 0.10, "label": "titre accroche", "id": 7, "role": "hit", "gain_db": -2},
+    {"t": 0.40, "label": "compteur 1300-1324", "id": 4, "role": "foley", "anchor": "start", "max_dur": 1.6, "fade_out": 0.25, "gain_db": -6},
+    {"t": 1.15, "label": "scene entre", "id": 10, "role": "whoosh", "gain_db": -2},
+    {"t": 1.60, "label": "soleil pop", "id": 5, "role": "pop", "gain_db": -2},
+    {"t": 1.85, "label": "etiquette caravane", "id": 3, "role": "pop", "gain_db": -5},
+    {"t": 4.60, "label": "sous-titre La Mecque", "id": 10, "role": "whoosh", "gain_db": -7, "lowpass": 6000},
+    {"t": 7.00, "label": "chuter le prix de l'or", "id": 6, "role": "hit", "pitch": -3, "gain_db": -2},
+    {"t": 10.25, "label": "transition outro", "id": 1, "role": "whoosh", "gain_db": -1},
+    {"t": 10.35, "label": "DJAMTALA", "id": 7, "role": "hit", "gain_db": -1},
+    {"t": 10.75, "label": "abonne-toi", "id": 5, "role": "pop", "gain_db": -4}
+  ]
+}

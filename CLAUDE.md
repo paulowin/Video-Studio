@@ -23,9 +23,25 @@ Un e-mail dédié à la chaîne a été créé. Comptes à créer dans l'ordre :
 Instagram — même pseudo `@djamtala` partout si possible.
 
 ## Méthode de production
-Pas encore définie. L'utilisateur regarde des tutos Instagram sur ce type de vidéos et
-va décrire les outils et étapes qu'ils utilisent, pour construire ensemble son propre
-processus. Quand c'est fait, documenter le processus ici.
+En cours de construction. Ce qui est en place :
+
+1. **Montage** : une composition HyperFrames par vidéo dans `projets/<nom>/` (modèle :
+   `projets/test-style`). Aperçu via `.claude/launch.json`, rendu MP4 dans `Export/`.
+2. **Musique de fond** : `<audio>` dans `index.html`, fichier dans `projets/<nom>/assets/music/`,
+   licence notée en commentaire. Volume discret (≈ -23 LUFS) pour laisser la place à la voix.
+3. **Effets sonores** : skill `real-sfx` (installé dans `~/.claude/skills/real-sfx`,
+   bibliothèque = `B-Roll/SFX/`, le sous-dossier `perso/` de sons de memes est exclu).
+   Liste des sons calée sur les temps GSAP de la vidéo dans `projets/<nom>/sfx-cues.json`,
+   puis `mix.py --target-lufs -14` → `Export/<nom>-sfx.mp4`.
+
+Reste à définir : voix off, sous-titres (Whisper), écriture des scripts.
+
+## Sons et musique
+- **Sources** : Freesound en CC0 uniquement (liste à télécharger : `SFX-liste-freesound.md`).
+  Openverse sert plutôt aux images d'archives / B-Roll.
+- **Éviter** les sons de memes, de films, de jeux ou de marques (risque Content ID, ton
+  pas adapté). BO de jeux vidéo : seulement si le compositeur l'autorise explicitement.
+- Musique tendance : l'ajouter dans l'appli au moment de publier (licence de la plateforme).
 
 ## Références de style (s'inspirer, ne pas copier)
 - instagram.com/reel/DecctgYO5KY — deconstruct.labb : infographie plate fond sombre.
