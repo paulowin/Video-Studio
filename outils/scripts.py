@@ -225,31 +225,34 @@ def cmd_verifier(a):
         afficher_doublons(res)
 
 
-def cmd_nouveau(a):
+def creer(titre, sujet, pays="", theme="", mots=None, statut="idee", projet="", corps=None):
+    """Crée le fichier du script et régénère l'index. Ne vérifie pas les doublons (voir chercher_doublons)."""
     DOSSIER.mkdir(exist_ok=True)
+    num = max([int(m["id"]) for m in tous()] or [0]) + 1
+    meta = {
+        "id": f"{num:03d}", "titre": titre, "sujet": sujet, "pays": pays or "",
+        "theme": theme or "", "mots": mots or [], "statut": statut, "cree": date.today().isoformat(),
+        "projet": projet or "", "liens": [],
+        "_chemin": DOSSIER / f"{num:03d}-{slug(titre)}.md",
+        "_corps": ("\n" + corps.strip() + "\n") if corps else MODELE.format(titre=titre),
+    }
+    ecrire(meta)
+    regenerer_index()
+    return meta
+
+
+def cmd_nouveau(a):
     mots = [x.strip() for x in a.mots.split(",") if x.strip()] if a.mots else []
-    cand = {"titre": a.titre, "sujet": a.sujet, "mots": mots}
-    res = chercher_doublons(cand)
+    res = chercher_doublons({"titre": a.titre, "sujet": a.sujet, "mots": mots})
     if res:
         print("Sujets déjà présents qui ressemblent :")
         afficher_doublons(res)
         if res[0][0] >= SEUIL_DOUBLON and not a.force:
             sys.exit("\nCréation refusée : doublon probable. Choisis un autre angle, "
                      "ou ajoute --force si c'est voulu (ex. une partie 2).")
-    scripts = tous()
-    num = max([int(m["id"]) for m in scripts] or [0]) + 1
-    meta = {
-        "id": f"{num:03d}", "titre": a.titre, "sujet": a.sujet, "pays": a.pays or "",
-        "theme": a.theme or "", "mots": mots, "statut": a.statut, "cree": date.today().isoformat(),
-        "projet": a.projet or "", "liens": [],
-        "_chemin": DOSSIER / f"{num:03d}-{slug(a.titre)}.md",
-        "_corps": MODELE.format(titre=a.titre),
-    }
-    if a.corps:
-        meta["_corps"] = "\n" + Path(a.corps).read_text(encoding="utf-8").strip() + "\n"
-    ecrire(meta)
-    regenerer_index()
-    print(f"Créé : scripts/{meta['_chemin'].name}  (#{num:03d}, statut {LIBELLES[a.statut]})")
+    corps = Path(a.corps).read_text(encoding="utf-8") if a.corps else None
+    meta = creer(a.titre, a.sujet, a.pays, a.theme, mots, a.statut, a.projet, corps)
+    print(f"Créé : scripts/{meta['_chemin'].name}  (#{int(meta['id']):03d}, statut {LIBELLES[a.statut]})")
 
 
 def cmd_liste(a):

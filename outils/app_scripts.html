@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Djamtala · Scripts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ground: #070914; --panel: #10142b; --panel2: #161b3a; --line: #232a52;
+    --gold: #f2c94c; --sky: #85b7eb; --blue: #378add; --ink: #ffffff; --mute: #9aa3c7;
+    --red: #ff7a7a; --orange: #f5a35c;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--ground); color: var(--ink); font: 15px/1.45 Inter, system-ui, sans-serif; }
+  header {
+    position: sticky; top: 0; z-index: 5; display: flex; gap: 16px; align-items: center;
+    padding: 14px 24px; background: rgba(7,9,20,.94); border-bottom: 1px solid var(--line);
+  }
+  .brand { font-family: Anton, sans-serif; font-size: 26px; letter-spacing: 4px; color: var(--gold); white-space: nowrap; }
+  .brand small { font-family: "JetBrains Mono", monospace; font-size: 13px; letter-spacing: 2px; color: var(--sky); margin-left: 8px; }
+  #search { flex: 1; max-width: 420px; background: var(--panel); border: 1px solid var(--line); color: var(--ink);
+    padding: 9px 14px; border-radius: 10px; font: inherit; }
+  button { font: inherit; cursor: pointer; border-radius: 10px; border: 1px solid var(--line); background: var(--panel2); color: var(--ink); padding: 8px 14px; }
+  button:hover { border-color: var(--sky); }
+  button.gold { background: var(--gold); color: var(--ground); border-color: var(--gold); font-weight: 700; }
+  button.gold:hover { filter: brightness(1.08); }
+  button.danger { border-color: var(--red); color: var(--red); background: transparent; }
+  .frieze { height: 6px; background: repeating-linear-gradient(90deg, var(--gold) 0 14px, var(--ground) 14px 20px, var(--blue) 20px 34px, var(--ground) 34px 40px); }
+
+  #stats { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px 24px 4px; }
+  .chip { padding: 6px 12px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); color: var(--mute); font-size: 13px; cursor: pointer; user-select: none; }
+  .chip b { color: var(--ink); margin-left: 4px; }
+  .chip.on { border-color: var(--gold); color: var(--gold); }
+
+  #board { display: grid; grid-template-columns: repeat(6, minmax(190px, 1fr)); gap: 12px; padding: 14px 24px 30px; overflow-x: auto; }
+  .col { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; min-height: 240px; display: flex; flex-direction: column; }
+  .col h3 { margin: 0; padding: 12px 14px; font-size: 13px; font-weight: 500; color: var(--sky); border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; }
+  .col h3 span { color: var(--mute); }
+  .cards { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .col.drop { border-color: var(--gold); }
+  .card { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; cursor: pointer; }
+  .card:hover { border-color: var(--gold); }
+  .card .num { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--gold); }
+  .card .t { font-weight: 700; margin: 2px 0 6px; }
+  .card .s { font-size: 13px; color: var(--mute); }
+  .tag { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 6px; background: #1d2550; color: var(--sky); margin: 4px 4px 0 0; }
+  .empty { color: var(--mute); font-size: 13px; padding: 8px 4px; }
+
+  #sujets { padding: 0 24px 40px; color: var(--mute); font-size: 13px; }
+  #sujets b { color: var(--sky); font-weight: 500; }
+
+  /* Panneau d'édition */
+  #veil { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; z-index: 10; }
+  #drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(860px, 100vw); background: var(--ground);
+    border-left: 1px solid var(--line); z-index: 11; transform: translateX(100%); transition: transform .2s ease; display: flex; flex-direction: column; }
+  #drawer.open { transform: none; }
+  #veil.open { display: block; }
+  .dhead { display: flex; align-items: center; gap: 10px; padding: 16px 22px; border-bottom: 1px solid var(--line); }
+  .dhead h2 { margin: 0; flex: 1; font-family: Anton, sans-serif; font-weight: 400; letter-spacing: 1px; font-size: 24px; color: var(--gold); }
+  .dbody { flex: 1; overflow: auto; padding: 18px 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; align-content: start; }
+  label { display: flex; flex-direction: column; gap: 5px; font-size: 12px; color: var(--mute); text-transform: uppercase; letter-spacing: 1px; }
+  label.full { grid-column: 1 / -1; }
+  input, select, textarea { background: var(--panel); border: 1px solid var(--line); color: var(--ink); border-radius: 9px; padding: 9px 11px; font: 15px Inter, sans-serif; text-transform: none; letter-spacing: 0; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--sky); }
+  textarea { font-family: "JetBrains Mono", monospace; font-size: 14px; line-height: 1.55; min-height: 420px; resize: vertical; }
+  #warn { grid-column: 1 / -1; display: none; border-radius: 10px; padding: 10px 14px; font-size: 14px; }
+  #warn.proche { display: block; background: rgba(245,163,92,.12); border: 1px solid var(--orange); }
+  #warn.doublon { display: block; background: rgba(255,122,122,.12); border: 1px solid var(--red); }
+  #warn.ok { display: block; background: rgba(133,183,235,.08); border: 1px solid var(--line); color: var(--mute); }
+  #warn a { color: var(--gold); cursor: pointer; }
+  .dfoot { display: flex; gap: 10px; align-items: center; padding: 14px 22px; border-top: 1px solid var(--line); }
+  .dfoot .sp { flex: 1; color: var(--mute); font-size: 13px; }
+  #toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--ground);
+    padding: 10px 18px; border-radius: 10px; font-weight: 700; display: none; z-index: 20; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">DJAMTALA<small>SCRIPTS</small></div>
+  <input id="search" placeholder="Chercher un titre, un sujet, un pays, un mot-clé…" autocomplete="off">
+  <button class="gold" id="btnNew">+ Nouveau script</button>
+</header>
+<div class="frieze"></div>
+<div id="stats"></div>
+<div id="board"></div>
+<div id="sujets"></div>
+
+<div id="veil"></div>
+<aside id="drawer" aria-hidden="true">
+  <div class="dhead">
+    <h2 id="dTitle">Nouveau script</h2>
+    <button id="btnClose" title="Fermer (Échap)">✕</button>
+  </div>
+  <div class="dbody">
+    <div id="warn"></div>
+    <label class="full">Titre (accroche)<input id="f_titre" placeholder="Cet empereur était plus riche que tous les rois d'Europe"></label>
+    <label>Sujet principal<input id="f_sujet" placeholder="Mansa Moussa"></label>
+    <label>Pays<input id="f_pays" placeholder="Côte d'Ivoire, Mali…"></label>
+    <label>Thème
+      <select id="f_theme">
+        <option value="">—</option><option>histoire</option><option>culture</option>
+        <option>personnalite</option><option>fait-surprenant</option><option>lieu</option><option>tradition</option>
+      </select>
+    </label>
+    <label>Statut<select id="f_statut"></select></label>
+    <label class="full">Mots-clés (séparés par des virgules)<input id="f_mots" placeholder="empire du mali, or, pèlerinage"></label>
+    <label>Projet vidéo<input id="f_projet" placeholder="projets/…"></label>
+    <label>Liens publiés (virgules)<input id="f_liens" placeholder="https://youtube.com/shorts/…"></label>
+    <label class="full">Script<textarea id="f_corps" spellcheck="true"></textarea></label>
+  </div>
+  <div class="dfoot">
+    <span class="sp" id="dInfo"></span>
+    <button id="btnNext">Étape suivante →</button>
+    <button class="gold" id="btnSave">Enregistrer</button>
+  </div>
+</aside>
+<div id="toast"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const norm = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+let DATA = { scripts: [], statuts: [], libelles: {} };
+let filtre = null, courant = null, sale = false, forcer = false, minuteur = null;
+
+const MODELE = (t) => `\n# ${t || "Titre"}\n\n## Accroche (1re seconde, à l'écran)\n\n\n## Voix off\n\n\n## Scènes et visuels\n- \n\n## Question finale (commentaires)\n\n\n## Sources à vérifier\n- \n\n## Notes\n`;
+
+async function api(methode, url, corps) {
+  const r = await fetch(url, { method: methode, headers: { "Content-Type": "application/json" }, body: corps ? JSON.stringify(corps) : undefined });
+  const d = await r.json().catch(() => ({}));
+  return { ok: r.ok, code: r.status, d };
+}
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.style.display = "block"; clearTimeout(t._h); t._h = setTimeout(() => (t.style.display = "none"), 2200); }
+
+async function charger() {
+  DATA = (await api("GET", "/api/scripts")).d;
+  $("#f_statut").innerHTML = DATA.statuts.map((s) => `<option value="${s}">${esc(DATA.libelles[s])}</option>`).join("");
+  rendre();
+}
+
+function correspond(m, q) {
+  if (!q) return true;
+  return norm([m.titre, m.sujet, m.pays, m.theme, (m.mots || []).join(" ")].join(" ")).includes(norm(q));
+}
+
+function rendre() {
+  const q = $("#search").value.trim();
+  const vis = DATA.scripts.filter((m) => correspond(m, q));
+  const total = DATA.scripts.length;
+  $("#stats").innerHTML =
+    `<span class="chip ${filtre ? "" : "on"}" data-f="">Tous <b>${total}</b></span>` +
+    DATA.statuts.map((s) => `<span class="chip ${filtre === s ? "on" : ""}" data-f="${s}">${esc(DATA.libelles[s])} <b>${DATA.scripts.filter((m) => m.statut === s).length}</b></span>`).join("");
+  document.querySelectorAll(".chip").forEach((c) => (c.onclick = () => { filtre = c.dataset.f || null; rendre(); }));
+
+  const cols = filtre ? [filtre] : DATA.statuts;
+  $("#board").style.gridTemplateColumns = `repeat(${cols.length}, minmax(190px, 1fr))`;
+  $("#board").innerHTML = cols.map((s) => {
+    const items = vis.filter((m) => m.statut === s).sort((a, b) => a.id - b.id);
+    return `<div class="col" data-s="${s}"><h3>${esc(DATA.libelles[s])}<span>${items.length}</span></h3><div class="cards">` +
+      (items.length ? items.map((m) => `<div class="card" draggable="true" data-id="${m.id}">
+          <div class="num">#${String(m.id).padStart(3, "0")}</div>
+          <div class="t">${esc(m.titre)}</div>
+          <div class="s">${esc(m.sujet)}</div>
+          <div>${m.pays ? `<span class="tag">${esc(m.pays)}</span>` : ""}${m.theme ? `<span class="tag">${esc(m.theme)}</span>` : ""}</div>
+        </div>`).join("") : `<div class="empty">—</div>`) + `</div></div>`;
+  }).join("");
+
+  document.querySelectorAll(".card").forEach((c) => {
+    c.onclick = () => ouvrir(+c.dataset.id);
+    c.ondragstart = (e) => e.dataTransfer.setData("text/plain", c.dataset.id);
+  });
+  document.querySelectorAll(".col").forEach((col) => {
+    col.ondragover = (e) => { e.preventDefault(); col.classList.add("drop"); };
+    col.ondragleave = () => col.classList.remove("drop");
+    col.ondrop = async (e) => {
+      e.preventDefault(); col.classList.remove("drop");
+      const id = +e.dataTransfer.getData("text/plain");
+      const r = await api("PUT", `/api/scripts/${id}`, { statut: col.dataset.s });
+      if (r.ok) { toast(`#${String(id).padStart(3, "0")} → ${DATA.libelles[col.dataset.s]}`); charger(); }
+    };
+  });
+
+  const sujets = [...new Set(DATA.scripts.map((m) => m.sujet).filter(Boolean))].sort((a, b) => norm(a).localeCompare(norm(b)));
+  $("#sujets").innerHTML = `<b>Sujets déjà traités (${sujets.length}) :</b> ${sujets.map(esc).join(" · ") || "aucun"}`;
+}
+
+function champs() {
+  return {
+    titre: $("#f_titre").value, sujet: $("#f_sujet").value, pays: $("#f_pays").value,
+    theme: $("#f_theme").value, statut: $("#f_statut").value, mots: $("#f_mots").value,
+    projet: $("#f_projet").value, liens: $("#f_liens").value, corps: $("#f_corps").value,
+  };
+}
+
+function remplir(m) {
+  $("#f_titre").value = m.titre || ""; $("#f_sujet").value = m.sujet || ""; $("#f_pays").value = m.pays || "";
+  const th = $("#f_theme");
+  if (m.theme && ![...th.options].some((o) => o.value === m.theme)) th.add(new Option(m.theme, m.theme));
+  th.value = m.theme || "";
+  $("#f_statut").value = m.statut || "idee"; $("#f_mots").value = (m.mots || []).join(", ");
+  $("#f_projet").value = m.projet || ""; $("#f_liens").value = (m.liens || []).join(", ");
+  $("#f_corps").value = (m.corps || "").replace(/^\n/, "");
+}
+
+async function ouvrir(id) {
+  forcer = false;
+  if (id) {
+    const r = await api("GET", `/api/scripts/${id}`);
+    courant = r.d; remplir(courant);
+    $("#dTitle").textContent = `#${String(id).padStart(3, "0")} · ${courant.sujet || "Script"}`;
+    $("#dInfo").textContent = `${courant.fichier} · créé le ${courant.cree}`;
+    $("#btnSave").textContent = "Enregistrer";
+    $("#btnNext").style.display = "";
+  } else {
+    courant = null; remplir({ statut: "idee", corps: MODELE("") });
+    $("#dTitle").textContent = "Nouveau script";
+    $("#dInfo").textContent = "Le sujet principal est vérifié contre tous les scripts existants.";
+    $("#btnSave").textContent = "Créer le script";
+    $("#btnNext").style.display = "none";
+  }
+  sale = false; verifier();
+  $("#drawer").classList.add("open"); $("#veil").classList.add("open");
+  setTimeout(() => (id ? $("#f_corps") : $("#f_titre")).focus(), 120);
+}
+
+function fermer() {
+  if (sale && !confirm("Fermer sans enregistrer les modifications ?")) return;
+  $("#drawer").classList.remove("open"); $("#veil").classList.remove("open"); courant = null;
+}
+
+async function verifier() {
+  const f = champs(), w = $("#warn");
+  if (!f.sujet.trim() && !f.titre.trim()) { w.className = ""; w.innerHTML = ""; return; }
+  const r = await api("POST", "/api/verifier", { titre: f.titre, sujet: f.sujet || f.titre, mots: f.mots, sauf: courant?.id });
+  const ds = r.d.doublons || [];
+  if (!ds.length) { w.className = "ok"; w.textContent = "✓ Sujet libre : rien de proche dans les scripts existants."; return; }
+  const pire = ds.some((x) => x.niveau === "doublon") ? "doublon" : "proche";
+  w.className = pire;
+  w.innerHTML = (pire === "doublon" ? "<b>⛔ Doublon probable</b> — ce sujet est déjà traité :" : "<b>⚠️ Sujet proche</b> — trouve un angle différent :") +
+    "<br>" + ds.map((x) => `• <a data-id="${x.id}">#${String(x.id).padStart(3, "0")} « ${esc(x.titre)} »</a> (${esc(DATA.libelles[x.statut] || x.statut)}, ${Math.round(x.score * 100)} %) — ${esc(x.pourquoi)}`).join("<br>");
+  w.querySelectorAll("a").forEach((a) => (a.onclick = () => { if (!sale || confirm("Quitter sans enregistrer ?")) { sale = false; ouvrir(+a.dataset.id); } }));
+}
+
+async function enregistrer() {
+  const f = champs();
+  if (!f.titre.trim() || !f.sujet.trim()) { toast("Titre et sujet principal obligatoires"); return; }
+  if (courant) {
+    const r = await api("PUT", `/api/scripts/${courant.id}`, f);
+    if (r.ok) { courant = r.d; sale = false; toast("Enregistré ✓"); charger(); }
+    else toast(r.d.erreur || "Erreur");
+  } else {
+    const r = await api("POST", "/api/scripts", { ...f, force: forcer });
+    if (r.code === 409) {
+      verifier(); forcer = true;
+      $("#btnSave").textContent = "Créer quand même (partie 2…)";
+      toast("Doublon probable : vérifie avant de créer");
+      return;
+    }
+    if (r.ok) { sale = false; toast(`Créé : #${String(r.d.id).padStart(3, "0")}`); await charger(); ouvrir(r.d.id); }
+    else toast(r.d.erreur || "Erreur");
+  }
+}
+
+$("#btnNew").onclick = () => ouvrir(null);
+$("#btnClose").onclick = fermer;
+$("#veil").onclick = fermer;
+$("#btnSave").onclick = enregistrer;
+$("#btnNext").onclick = () => {
+  const i = DATA.statuts.indexOf($("#f_statut").value);
+  if (i < DATA.statuts.length - 1) { $("#f_statut").value = DATA.statuts[i + 1]; sale = true; enregistrer(); }
+};
+$("#search").oninput = rendre;
+["#f_titre", "#f_sujet", "#f_pays", "#f_theme", "#f_statut", "#f_mots", "#f_projet", "#f_liens", "#f_corps"].forEach((s) =>
+  $(s).addEventListener("input", () => { sale = true; }));
+["#f_titre", "#f_sujet", "#f_mots"].forEach((s) => $(s).addEventListener("input", () => {
+  forcer = false; if (!courant) $("#btnSave").textContent = "Créer le script";
+  clearTimeout(minuteur); minuteur = setTimeout(verifier, 350);
+}));
+$("#f_titre").addEventListener("input", () => {
+  if (!courant) { const c = $("#f_corps"); c.value = c.value.replace(/^# .*$/m, `# ${$("#f_titre").value || "Titre"}`); }
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && $("#drawer").classList.contains("open")) fermer();
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s" && $("#drawer").classList.contains("open")) { e.preventDefault(); enregistrer(); }
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); $("#search").focus(); }
+});
+window.addEventListener("beforeunload", (e) => { if (sale) { e.preventDefault(); e.returnValue = ""; } });
+charger();
+</script>
+</body>
+</html>

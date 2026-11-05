@@ -6,6 +6,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["--yes", "hyperframes@0.9.9", "preview", "projets/test-style", "--foreground", "--no-open", "--port=3002"],
       "port": 3002
+    },
+    {
+      "name": "scripts-app",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["outils/app_scripts.py", "--no-open"],
+      "port": 8765
     }
   ]
 }

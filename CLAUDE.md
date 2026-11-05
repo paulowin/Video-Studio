@@ -38,6 +38,11 @@ En cours de construction. Ce qui est en place :
    `HYPERFRAMES_PYTHON=<python.exe> npx hyperframes tts voix.txt -v ff_siwis -o assets/voice/voix.wav`
    (Kokoro, local, licence Apache 2.0 ; `pip install kokoro-onnx soundfile`). Plus tard : vraies voix.
    Dans `index.html` : `<audio id="voice">` décalé de 0,2 s, musique baissée à `data-volume="0.32"`.
+   **Voix MiniMax (EN PAUSE — l'utilisateur ne veut pas payer la recharge minimum de 25 $)** : `python outils/voix_minimax.py essai|voix|generer <voix.txt> --voix <id>`
+   (API T2A, modèle `speech-2.8-hd`, `language_boost: French`, voix `French_MaleNarrator`,
+   `French_FemaleAnchor`…). Clé API dans la variable d'environnement `MINIMAX_API_KEY`,
+   jamais dans le projet. Payant (≈ 100 $ / M caractères, pas de crédit gratuit trouvé) ;
+   droits commerciaux à vérifier dans leurs conditions avant de publier.
 5. **Sous-titres** : `faster-whisper` (modèle `small`, `language="fr"`, `word_timestamps=True`,
    texte de `voix.txt` en `initial_prompt`) → `transcript.json` ; morceaux de 1 à 4 mots calés
    sur la voix, mots-clés en or (`.hl`). Le whisper-cpp de HyperFrames n'est pas installé.
@@ -46,6 +51,11 @@ En cours de construction. Ce qui est en place :
 ## Scripts (outil anti-doublons)
 Tous les scripts vivent dans `scripts/` (un fichier `NNN-titre.md` par vidéo) et sont gérés
 par `python outils/scripts.py`. Tableau de bord : `scripts/INDEX.md` (généré, ne pas éditer).
+
+**L'app « Djamtala Scripts »** : double-clic sur `Djamtala-Scripts.bat` (ou
+`python outils/app_scripts.py`) → http://127.0.0.1:8765. Tableau par statut (glisser une carte
+pour changer d'étape), recherche, édition du script, alerte doublon en direct. Elle écrit les
+mêmes fichiers que la ligne de commande. Dans Claude : aperçu `scripts-app` de `.claude/launch.json`.
 
 - **Avant d'écrire un script** : `python outils/scripts.py verifier "<sujet>"`. Un même sujet
   principal (ex. Mansa Moussa / Mansa Musa) bloque la création ; des mots en commun donnent un
